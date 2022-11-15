@@ -1,3 +1,6 @@
 name = "first_worker"
 main = "src/index.ts"
 compatibility_date = "2022-11-15"
+kv_namespaces = [
+  { binding = "first_worker", preview_id = "8f6602d87e0c49b58bdbbb157d318c40", id = "a8f112aaefd746b6ac72a06f8dad035f" }
+]
