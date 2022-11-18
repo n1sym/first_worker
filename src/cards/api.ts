@@ -1,11 +1,17 @@
 import { Hono } from "hono";
 
-let cardList = [{ id: 1, name: "2022夏", title: "" }];
+const PREFIX = "v1:card:";
 
 const cards = new Hono();
 
-const getCard = (KV: KVNamespace, key: string) => {
-  return KV.get(key)
+const getCard = (KV: KVNamespace, id: string) => {
+  return KV.get(`${PREFIX}${id}`, "json")
+}
+
+const createCard = async (KV: KVNamespace, param: any) => {
+  const id = crypto.randomUUID().slice(0,8)
+  await KV.put(`${PREFIX}${id}`, JSON.stringify(param))
+  return id
 }
 
 cards.get("/:id", async (c) => {
@@ -16,8 +22,8 @@ cards.get("/:id", async (c) => {
 
 cards.post("/", async (c) => {
   const param = await c.req.json();
-  console.log(JSON.stringify(param))
-  return c.json("ok", 201);
+  const res = await createCard(c.env.first_worker, param)
+  return c.json(res, 201);
 });
 
 export { cards };
